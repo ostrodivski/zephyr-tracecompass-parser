@@ -22,6 +22,7 @@ class TraceDisplay :
         self.entryIdToNameMap = {}
 
         self.semaphoreCounter = 1
+        self.mutexCounter = 1
         self.socketCounter = 1            
 
     ### MAIN FUNCTIONS ###
@@ -56,147 +57,158 @@ class TraceDisplay :
 
         elif eventName == "semaphore_take_enter" :
             self.semaphoreTakeEnter()
-        elif eventName == "semaphore_take_blocking" :
-            self.semaphoreTakeBlocking()
         elif eventName == "semaphore_take_exit" :
             self.semaphoreTakeExit()
         elif eventName == "semaphore_give_enter" :
             self.semaphoreGiveEnter()
         elif eventName == "semaphore_give_exit" :
             self.semaphoreGiveExit()
+        elif eventName == "semaphore_take_blocking" :
+            self.semaphoreTakeBlocking()
 
+        elif eventName == "mutex_lock_enter" :
+            self.mutexLockEnter()
+        elif eventName == "mutex_lock_exit" :
+            self.mutexLockExit()
+        elif eventName == "mutex_unlock_enter" :
+            self.mutexUnlockEnter()
+        elif eventName == "mutex_unlock_exit" :
+            self.mutexUnlockExit()
+        elif eventName == "mutex_lock_blocking" :
+            self.mutexLockBlocking()
+    
         elif eventName == "isr_enter" :
             self.isrEnter()
         elif eventName == "isr_exit" :
             self.isrExit()
 
         elif eventName == "socket_close_enter" :
-            self.socketGenericStateEnter("close")
+            self.socketGenericStateEnter("Close")
         elif eventName == "socket_close_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_shutdown_enter" :
-            self.socketGenericStateEnter("shutdown")
+            self.socketGenericStateEnter("Shutdown")
         elif eventName == "socket_shutdown_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_bind_enter" :
-            self.socketGenericStateEnter("bind")
+            self.socketGenericStateEnter("Bind")
         elif eventName == "socket_bind_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_connect_enter" :
-            self.socketGenericStateEnter("connect")
+            self.socketGenericStateEnter("Connect")
         elif eventName == "socket_connect_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_listen_enter" :
-            self.socketGenericStateEnter("listen")
+            self.socketGenericStateEnter("Listen")
         elif eventName == "socket_listen_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_accept_enter" :
-            self.socketGenericStateEnter("accept")
+            self.socketGenericStateEnter("Accept")
         elif eventName == "socket_accept_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_sendto_enter" :
-            self.socketGenericStateEnter("sendto")
+            self.socketGenericStateEnter("Sendto")
         elif eventName == "socket_sendto_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_sendmsg_enter" :
-            self.socketGenericStateEnter("sendmsg")
+            self.socketGenericStateEnter("Sendmsg")
         elif eventName == "socket_sendmsg_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_recvfrom_enter" :
-            self.socketGenericStateEnter("recvfrom")
+            self.socketGenericStateEnter("Recvfrom")
         elif eventName == "socket_recvfrom_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_recvmsg_enter" :
-            self.socketGenericStateEnter("recvmsg")
+            self.socketGenericStateEnter("Recvmsg")
         elif eventName == "socket_recvmsg_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_fcntl_enter" :
-            self.socketGenericStateEnter("fcntl")
+            self.socketGenericStateEnter("Fcntl")
         elif eventName == "socket_fcntl_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_ioctl_enter" :
-            self.socketGenericStateEnter("ioctl")
+            self.socketGenericStateEnter("Ioctl")
         elif eventName == "socket_ioctl_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_poll_enter" :
-            self.socketGenericStateEnter("poll")
+            self.socketGenericStateEnter("Poll")
         elif eventName == "socket_poll_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_getsockopt_enter" :
-            self.socketGenericStateEnter("getsockopt")
+            self.socketGenericStateEnter("Getsockopt")
         elif eventName == "socket_getsockopt_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_setsockopt_enter" :
-            self.socketGenericStateEnter("setsockopt")
+            self.socketGenericStateEnter("Setsockopt")
         elif eventName == "socket_setsockopt_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_getpeername_enter" :
-            self.socketGenericStateEnter("getpeername")
+            self.socketGenericStateEnter("Getpeername")
         elif eventName == "socket_getpeername_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_getsockname_enter" :
-            self.socketGenericStateEnter("getsockname")
+            self.socketGenericStateEnter("Getsockname")
         elif eventName == "socket_getsockname_exit" :
             self.socketGenericStateExit()
         elif eventName == "socket_socketpair_enter" :
-            self.socketGenericStateEnter("socketpair")
+            self.socketGenericStateEnter("Socketpair")
         elif eventName == "socket_socketpair_exit" :
             self.socketGenericStateExit()
 
         elif eventName == "gpio_pin_configure_interrupt_enter" :
-            self.gpioGenericStateEnter("pin configure interrupt")
+            self.gpioGenericStateEnter("Pin configure interrupt")
         elif eventName == "gpio_pin_configure_interrupt_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_pin_configure_enter" :
-            self.gpioGenericStateEnter("pin configure")
+            self.gpioGenericStateEnter("Pin configure")
         elif eventName == "gpio_pin_configure_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_port_get_direction_enter" :
-            self.gpioGenericStateEnter("port get direction")
+            self.gpioGenericStateEnter("Port get direction")
         elif eventName == "gpio_port_get_direction_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_pin_get_config_enter" :
-            self.gpioGenericStateEnter("pin get config")
+            self.gpioGenericStateEnter("Pin get config")
         elif eventName == "gpio_pin_get_config_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_port_get_raw_enter" :
-            self.gpioGenericStateEnter("port get raw")
+            self.gpioGenericStateEnter("Port get raw")
         elif eventName == "gpio_port_get_raw_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_port_set_mask_raw_enter" :
-            self.gpioGenericStateEnter("port set mask raw")
+            self.gpioGenericStateEnter("Port set mask raw")
         elif eventName == "gpio_port_set_mask_raw_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_port_set_bits_raw_enter" :
-            self.gpioGenericStateEnter("port set bits raw")
+            self.gpioGenericStateEnter("Port set bits raw")
         elif eventName == "gpio_port_set_bits_raw_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_port_clear_bits_raw_enter" :
-            self.gpioGenericStateEnter("port clear bits raw")
+            self.gpioGenericStateEnter("Port clear bits raw")
         elif eventName == "gpio_port_clear_bits_raw_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_port_toggle_bits_enter" :
-            self.gpioGenericStateEnter("port toggle bits")
+            self.gpioGenericStateEnter("Port toggle bits")
         elif eventName == "gpio_port_toggle_bits_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_init_callback_enter" :
-            self.gpioGenericStateEnter("init callback")
+            self.gpioGenericStateEnter("Init callback")
         elif eventName == "gpio_init_callback_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_add_callback_enter" :
-            self.gpioGenericStateEnter("add callback")
+            self.gpioGenericStateEnter("Add callback")
         elif eventName == "gpio_add_callback_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_remove_callback_enter" :
-            self.gpioGenericStateEnter("remove callback")
+            self.gpioGenericStateEnter("Remove callback")
         elif eventName == "gpio_remove_callback_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_get_pending_int_enter" :
-            self.gpioGenericStateEnter("get pending int")
+            self.gpioGenericStateEnter("Get pending int")
         elif eventName == "gpio_get_pending_int_exit" :
             self.gpioGenericStateExit()
         elif eventName == "gpio_fire_callbacks_enter" :
-            self.gpioGenericStateEnter("fire callbacks")
+            self.gpioGenericStateEnter("Fire callbacks")
         elif eventName == "gpio_fire_callbacks_exit" :
             self.gpioGenericStateExit()
 
@@ -250,6 +262,29 @@ class TraceDisplay :
 
     def semaphoreTakeBlocking(self) :
         pass
+    
+    def mutexLockEnter(self) :
+        mutexId = getEventFieldValue(self.currentEvent, "id")
+        mutexName = self.getMutexNameOrCreate(mutexId)
+        self.stateEnter(mutexName, "Lock")
+
+    def mutexLockExit(self) :
+        mutexId = getEventFieldValue(self.currentEvent, "id")
+        mutexName = self.getSemaphoreNameOrCreate(mutexId)
+        self.stateExit(mutexName)
+
+    def mutexUnlockEnter(self) :
+        mutexId = getEventFieldValue(self.currentEvent, "id")
+        mutexName = self.getMutexNameOrCreate(mutexId)
+        self.stateEnter(mutexName, "Unlock")
+
+    def mutexUnlockExit(self) :
+        mutexId = getEventFieldValue(self.currentEvent, "id")
+        mutexName = self.getSemaphoreNameOrCreate(mutexId)
+        self.stateExit(mutexName)
+
+    def mutexLockBlocking(self) :
+        pass
 
     # isr
     def isrEnter(self) :
@@ -278,6 +313,9 @@ class TraceDisplay :
 
 
 
+    ### AUXILIARY ###
+
+
 
     def entryRename(self, entryId, newEntryName) :
         if entryId not in self.entryIdToNameMap.keys() :
@@ -302,6 +340,12 @@ class TraceDisplay :
             self.entryIdToNameMap[semaphoreId] = "semaphore_" + str(self.semaphoreCounter)
             self.semaphoreCounter += 1
         return self.entryIdToNameMap[semaphoreId]
+
+    def getMutexNameOrCreate(self, mutexId) :
+        if mutexId not in self.entryIdToNameMap.keys() :
+            self.entryIdToNameMap[mutexId] = "mutex_" + str(self.mutexCounter)
+            self.mutexCounter += 1
+        return self.entryIdToNameMap[mutexId]
 
     def getSocketNameOrCreate(self, socketId) :
         if socketId not in self.entryIdToNameMap.keys() :
