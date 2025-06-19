@@ -252,16 +252,18 @@ class TraceDisplay :
     def semaphoreTakeEnter(self) :
         semaphoreId = getEventFieldValue(self.currentEvent, "id")
         semaphoreName = self.getSemaphoreNameOrCreate(semaphoreId)
-        self.stateEnter(semaphoreName, "Take")
+        self.stateEnter(semaphoreName, "Taking")
 
     def semaphoreTakeExit(self) :
         semaphoreId = getEventFieldValue(self.currentEvent, "id")
         semaphoreName = self.getSemaphoreNameOrCreate(semaphoreId)
         self.stateExit(semaphoreName)
+        self.stateEnter(semaphoreName, "Taken")
 
     def semaphoreGiveEnter(self) :
         semaphoreId = getEventFieldValue(self.currentEvent, "id")
         semaphoreName = self.getSemaphoreNameOrCreate(semaphoreId)
+        self.stateExit(semaphoreName)
         self.stateEnter(semaphoreName, "Give")
 
     def semaphoreGiveExit(self) :
@@ -356,19 +358,22 @@ class TraceDisplay :
 
     def getSemaphoreNameOrCreate(self, semaphoreId) :
         if semaphoreId not in self.entryIdToNameMap.keys() :
-            self.entryIdToNameMap[semaphoreId] = "semaphore_" + str(self.semaphoreCounter)
+            self.entryIdToNameMap[semaphoreId] = "semaphore_" + str(self.semaphoreCounter) + \
+                " (" + str(semaphoreId) + ")"
             self.semaphoreCounter += 1
         return self.entryIdToNameMap[semaphoreId]
 
     def getMutexNameOrCreate(self, mutexId) :
         if mutexId not in self.entryIdToNameMap.keys() :
-            self.entryIdToNameMap[mutexId] = "mutex_" + str(self.mutexCounter)
+            self.entryIdToNameMap[mutexId] = "mutex_" + str(self.mutexCounter) + \
+                " (" + str(mutexId) + ")"
             self.mutexCounter += 1
         return self.entryIdToNameMap[mutexId]
 
     def getSocketNameOrCreate(self, socketId) :
         if socketId not in self.entryIdToNameMap.keys() :
-            self.entryIdToNameMap[socketId] = "socket_" + str(self.socketCounter)
+            self.entryIdToNameMap[socketId] = "socket_" + str(self.socketCounter) + \
+                " (" + str(socketId) + ")"
             self.socketCounter += 1
         return self.entryIdToNameMap[socketId]
 
