@@ -155,6 +155,15 @@ class TraceDisplay :
         elif eventName == "socket_socketpair_exit" :
             self.socketGenericStateExit()
 
+        elif eventName == "net_recv_data_enter" :
+            self.netRecvDataEnter()
+        elif eventName == "net_recv_data_exit" :
+            self.netRecvDataExit()
+        elif eventName == "net_send_data_enter" :
+            self.netSendDataEnter()
+        elif eventName == "net_send_data_exit" :
+            self.netSendDataExit()
+
         elif eventName == "gpio_pin_configure_interrupt_enter" :
             self.gpioGenericStateEnter("Pin configure interrupt")
         elif eventName == "gpio_pin_configure_interrupt_exit" :
@@ -303,6 +312,16 @@ class TraceDisplay :
         socketId = getEventFieldValue(self.currentEvent, "id")
         socketName = self.getSocketNameOrCreate(socketId)
         self.stateExit(socketName)
+
+    # net
+    def netRecvDataEnter(self) :
+        self.stateEnter("net", "Recv data")
+    def netRecvDataExit(self) :
+        self.stateExit("net")
+    def netSendDataEnter(self) :
+        self.stateEnter("net", "Send data")
+    def netSendDataExit(self) :
+        self.stateExit("net")
 
     # gpio
     def gpioGenericStateEnter(self, stateName) :
